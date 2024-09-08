@@ -7,3 +7,4 @@ django-cors-headers
 djangorestframework-simplejwt
 daphne
 uvicorn
+gunicorn
