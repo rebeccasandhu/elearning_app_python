@@ -1,0 +1,120 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content%}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    {% include "main/header.html" %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+        <div data-push
+             data-responsive-width="992px"
+             class="mdk-drawer-layout js-mdk-drawer-layout">
+            <div class="mdk-drawer-layout__content page ">
+
+                <div class="container-fluid page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item active">Students</li>
+                    </ol>
+
+                    <div class="d-flex flex-column flex-sm-row flex-wrap mb-headings align-items-start align-items-sm-center">
+                        <div class="flex mb-2 mb-sm-0">
+                            <h1 class="h2">List of Students</h1>
+                        </div>
+                    </div>
+
+                    <div class="card card-body border-left-3 border-left-primary navbar-shadow mb-4">
+                        <form action="" method="get">
+                            <div class="d-flex flex-wrap2 align-items-center mb-headings">
+                                <div class="flex search-form ml-3 search-form--light">
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Search students"
+                                           id="searchSample02"
+                                           name="q" 
+                                           value="{{ request.GET.q|default_if_none:'' }}"> 
+                                    <button class="btn"
+                                            type="submit"
+                                            role="button"><i class="material-icons">search</i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {% if not students %}
+                    <div class="alert alert-light alert-dismissible border-1 border-left-3 border-left-warning"
+                         role="alert">
+                        <button type="button"
+                                class="close"
+                                data-dismiss="alert"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="text-black-70">Ohh no! No students to display.</div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        {% for student in students %}
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="d-flex flex-column flex-sm-row">
+                                        <a href="{% url 'view_profile' student.student.id %}"
+                                           class="avatar avatar-lg avatar-4by3 mb-3 w-xs-plus-down-100 mr-sm-3">
+                                            <img src="{% if student.student.photo %}{{ student.student.photo.url }}{%  else %}{% static 'images/default_user.png' %}{% endif %}"
+                                                 alt="Student image"
+                                                 class="avatar-img rounded">
+                                        </a>
+                                        <div class="flex"
+                                             style="min-width: 200px;">
+                                            <h4 class="card-title mb-1">
+                                                <a href="{% url 'view_profile' student.student.id %}">{{ student.student.first_name }} {{ student.student.last_name }}</a>
+                                            </h4>
+                                            <p class="text-black-70">Email: {{ student.student.email }}</p>
+                                            <p class="text-black-70">Gender: {{ student.student.gender }}</p>
+
+                                            <p class="text-black-70">Courses Enrolled: {{ student.enrollments.count }}</p>
+                                            <p class="text-black-70">Status: {{ student.student.status }}</p>
+                                            
+                                            <ul>
+                                                {% for enrollment in student.enrollments %}
+                                                <li><a href="{% url 'view_course_detail' enrollment.course.id %}">{{ enrollment.course.name }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endfor%}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% include "main/side-menu.html" %}
+
+        </div>
+
+        <!-- App Settings FAB -->
+        <div id="app-settings">
+            <app-settings layout-active="default"
+                          :layout-location="{
+                                    'fixed': 'fixed-instructor-courses.html',
+                                    'default': 'instructor-courses.html'
+                                    }"
+                          sidebar-variant="bg-transparent border-0"></app-settings>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

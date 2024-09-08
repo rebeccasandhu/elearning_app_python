@@ -1,0 +1,210 @@
+<div class="mdk-drawer js-mdk-drawer"
+                 id="default-drawer">
+                <div class="mdk-drawer__content ">
+                    <div class="sidebar sidebar-left sidebar-dark bg-dark o-hidden"
+                         data-perfect-scrollbar>
+                        <div class="sidebar-p-y">
+                            <ul class="sidebar-menu sm-active-button-bg">
+                                <li class="sidebar-menu-item {{ home_menu_active }}">
+                                    <a class="sidebar-menu-button"
+                                       href="{% url 'home' %}">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">home</i> Home
+                                    </a>
+                                </li>
+                                <li class="sidebar-menu-item {{ course_menu_active }}">
+                                    <a class="sidebar-menu-button"
+                                       href="{% url 'list_course' %}">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">search</i> Courses
+                                    </a>
+                                </li>
+                                <li class="sidebar-menu-item {{ profile_menu_active }}">
+                                    <a class="sidebar-menu-button"
+                                       href="{% url 'update_profile' user_id=user.id %}">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">person_outline</i> Profile Manager
+                                    </a>
+                                </li>
+                                {% if user.role.name == 'teacher' %}
+                                <li class="sidebar-menu-item {{ student_menu_active }}">
+                                    <a class="sidebar-menu-button"
+                                       href="{% url 'view_students'%}">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">account_box</i> Students
+                                    </a>
+                                </li>
+
+                                <li class="sidebar-menu-item {{ teacher_menu_active }}">
+                                    <a class="sidebar-menu-button"
+                                       href="{% url 'view_teachers' %}">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">school</i> Teachers
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                            </ul>
+                            {% comment %} <!-- Components menu -->
+                            <div class="sidebar-heading">Components</div>
+                            <ul class="sidebar-menu">
+                                <li class="sidebar-menu-item">
+                                    <a class="sidebar-menu-button sidebar-js-collapse"
+                                       data-toggle="collapse"
+                                       href="#components_menu">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">tune</i>
+                                        Components
+                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                    </a>
+                                    <ul class="sidebar-submenu sm-indent collapse"
+                                        id="components_menu">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-avatars.html">
+                                                <span class="sidebar-menu-text">Avatars</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-forms.html">
+                                                <span class="sidebar-menu-text">Forms</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-loaders.html">
+                                                <span class="sidebar-menu-text">Loaders</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-tables.html">
+                                                <span class="sidebar-menu-text">Tables</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-cards.html">
+                                                <span class="sidebar-menu-text">Cards</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-tabs.html">
+                                                <span class="sidebar-menu-text">Tabs</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-icons.html">
+                                                <span class="sidebar-menu-text">Icons</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-buttons.html">
+                                                <span class="sidebar-menu-text">Buttons</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-alerts.html">
+                                                <span class="sidebar-menu-text">Alerts</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-badges.html">
+                                                <span class="sidebar-menu-text">Badges</span>
+                                            </a>
+                                        </li>
+                                        <!-- <li class="sidebar-menu-item">
+<a class="sidebar-menu-button" href="ui-modals.html">
+  <span class="sidebar-menu-text">- Modals</span>
+</a>
+</li> -->
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-progress.html">
+                                                <span class="sidebar-menu-text">Progress Bars</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-pagination.html">
+                                                <span class="sidebar-menu-text">Pagination</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="sidebar-menu-item">
+                                    <a class="sidebar-menu-button sidebar-js-collapse"
+                                       data-toggle="collapse"
+                                       href="#plugins_menu">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">folder</i>
+                                        Plugins
+                                        <span class="ml-auto sidebar-menu-toggle-icon"></span>
+                                    </a>
+                                    <ul class="sidebar-submenu sm-indent collapse"
+                                        id="plugins_menu">
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-charts.html">
+                                                <span class="sidebar-menu-text">Charts</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-drag.html">
+                                                <span class="sidebar-menu-text">Drag &amp; Drop</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-calendar.html">
+                                                <span class="sidebar-menu-text">Calendar</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-nestable.html">
+                                                <span class="sidebar-menu-text">Nestable</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-tree.html">
+                                                <span class="sidebar-menu-text">Tree</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-maps-vector.html">
+                                                <span class="sidebar-menu-text">Vector Maps</span>
+                                            </a>
+                                        </li>
+                                        <li class="sidebar-menu-item">
+                                            <a class="sidebar-menu-button"
+                                               href="ui-sweet-alert.html">
+                                                <span class="sidebar-menu-text">Sweet Alert</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <!-- // END Components Menu -->
+
+                            <div class="sidebar-heading">Layout</div>
+                            <ul class="sidebar-menu">
+                                <li class="sidebar-menu-item active">
+                                    <a class="sidebar-menu-button"
+                                       href="instructor-courses.html">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dashboard</i> Fluid Layout
+                                    </a>
+                                </li>
+                                <li class="sidebar-menu-item">
+                                    <a class="sidebar-menu-button"
+                                       href="fixed-instructor-courses.html">
+                                        <i class="sidebar-menu-icon sidebar-menu-icon--left material-icons">dashboard</i> Fixed Layout
+                                    </a>
+                                </li>
+                            </ul> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,140 @@
+{% load static %}
+<!-- Header -->
+<div id="header"
+data-fixed
+class="mdk-header js-mdk-header mb-0">
+<div class="mdk-header__content">
+
+   <!-- Navbar -->
+   <nav id="default-navbar"
+        class="navbar navbar-expand navbar-dark bg-primary m-0">
+       <div class="container-fluid">
+           <!-- Toggle sidebar -->
+           <button class="navbar-toggler d-block"
+                   data-toggle="sidebar"
+                   type="button">
+               <span class="material-icons">menu</span>
+           </button>
+
+           <!-- Brand -->
+           <a href="{% url 'home' %}"
+              class="navbar-brand">
+               {% comment %} <img src="assets/images/logo/white.svg"
+                    class="mr-2"
+                    alt="LearnPlus" /> {% endcomment %}
+               <span class="d-none d-xs-md-block">LearnPlus</span>
+           </a>
+
+           {% comment %} <ul class="nav navbar-nav navbar-nav-stats d-none d-md-flex flex-nowrap">
+               <li class="nav-item">
+                   <div class="nav-stats">$591 <small>GROSS</small></div>
+               </li>
+               <li class="nav-item">
+                   <div class="nav-stats">$31 <small>TAXES</small></div>
+               </li>
+               <li class="nav-item mr-3">
+                   <div class="nav-stats">$560 <small>NET</small></div>
+               </li>
+           </ul> {% endcomment %}
+
+           {% comment %} <!-- Search -->
+           <form class="search-form d-none d-md-flex">
+               <input type="text"
+                      class="form-control"
+                      placeholder="Search">
+               <button class="btn"
+                       type="button"><i class="material-icons font-size-24pt">search</i></button>
+           </form>
+           <!-- // END Search --> {% endcomment %}
+
+           {% comment %} <div class="flex"></div>
+
+           <!-- Menu -->
+           <ul class="nav navbar-nav flex-nowrap d-none d-lg-flex">
+               <li class="nav-item">
+                   <a class="nav-link"
+                      href="instructor-forum.html">Forum</a>
+               </li>
+           </ul> {% endcomment %}
+
+           <!-- Menu -->
+           <ul class="nav navbar-nav flex-nowrap">
+
+               <!-- Notifications dropdown -->
+               <li class="nav-item dropdown dropdown-notifications dropdown-menu-sm-full">
+                   <button class="nav-link btn-flush dropdown-toggle"
+                           type="button"
+                           data-toggle="dropdown"
+                           data-dropdown-disable-document-scroll
+                           data-caret="false">
+                       <i class="material-icons">notifications</i>
+                       {% if unread_notifications.count > 0 %}
+                            <span class="badge badge-notifications badge-danger">{{ unread_notifications.count }}</span>
+                        {% endif %}
+                   </button>
+                   <div class="dropdown-menu dropdown-menu-right">
+                       <div data-perfect-scrollbar
+                            class="position-relative">
+                           <div class="dropdown-header"><strong>Notifications</strong></div>
+                           <div class="list-group list-group-flush mb-0">
+                            {% if unread_notifications %}
+                                {% for notification in unread_notifications %}
+                                    <a href="{% url 'mark_notification_as_read' notification.id %}"
+                                    class="list-group-item list-group-item-action unread">
+                                        <span class="d-flex align-items-center mb-1">
+                                            <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                                            <span class="ml-auto unread-indicator bg-primary"></span>
+                                        </span>
+                                        <span class="d-flex">
+                                            <span class="avatar avatar-xs mr-2">
+                                                <img src="{% static 'images/people/110/woman-5.jpg' %}" alt="avatar" class="avatar-img rounded-circle">
+                                            </span>
+                                            <span class="flex d-flex flex-column">
+                                                <strong>{{ notification.message }}</strong>
+                                            </span>
+                                        </span>
+                                    </a>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-center m-2">No new notifications</p>
+                            {% endif %}
+
+                           </div>
+                       </div>
+                   </div>
+               </li>
+               <!-- // END Notifications dropdown -->
+               <!-- User dropdown -->
+               <li class="nav-item dropdown ml-1 ml-md-3">
+                   <a class="nav-link dropdown-toggle"
+                      data-toggle="dropdown"
+                      href="#"
+                      role="button"><img src="{% if user.photo %}{{ user.photo.url }}{% else %}{% static 'images/default_user.png' %}{% endif %}"
+                            alt="Avatar"
+                            class="rounded-circle"
+                            width="40"></a>
+                   <div class="dropdown-menu dropdown-menu-right">
+                       <a class="dropdown-item"
+                          href="{% url 'update_profile' user_id=user.id %}">
+                           <i class="material-icons">edit</i> Edit Account
+                       </a>
+                       {% comment %} <a class="dropdown-item"
+                          href="instructor-profile.html">
+                           <i class="material-icons">person</i> Public Profile
+                       </a> {% endcomment %}
+                       <a class="dropdown-item"
+                          href="{% url 'logout' %}">
+                           <i class="material-icons">lock</i> Logout
+                       </a>
+                   </div>
+               </li>
+               <!-- // END User dropdown -->
+           </ul>
+       </div>
+   </nav>
+   <!-- // END Navbar -->
+
+</div>
+</div>
+
+<!-- // END Header -->

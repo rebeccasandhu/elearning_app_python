@@ -1,0 +1,83 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content%}
+
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    {% include "main/header.html" %}
+
+    <!-- Header Layout Content -->
+        <div class="mdk-header-layout__content">
+
+            <div data-push
+                    data-responsive-width="992px"
+                    class="mdk-drawer-layout js-mdk-drawer-layout">
+                <div class="mdk-drawer-layout__content page ">
+
+                    <div class="container-fluid page__container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{% url 'list_course' %}">Course Manager</a></li>
+                            <li class="breadcrumb-item active">Add Course</li>
+                        </ol>
+                        <h1 class="h2">Add Course</h1>
+                        <div class="card">
+                            {% comment %} <div class="card-header">
+                                <h4 class="card-title">Basic</h4>
+                            </div> {% endcomment %}
+                            <div class="card-body">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ form.as_p }}
+                                    <div class="form-group row mb-0">
+                                        <div class="col-sm-9 offset-sm-3">
+                                            <button type="submit"
+                                                    class="btn btn-success">Create Course</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- add sidemenu -->
+                 {% include "main/side-menu.html" %}
+            </div>
+
+            <!-- App Settings FAB -->
+            <div id="app-settings">
+                <app-settings layout-active="default"
+                                :layout-location="{
+    'fixed': 'fixed-instructor-quiz-edit.html',
+    'default': 'instructor-quiz-edit.html'
+    }"
+                                sidebar-variant="bg-transparent border-0"></app-settings>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</div>
+{% comment %} <!-- templates/main/create_course.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course</title>
+</head>
+<body>
+    <h2>Create Course</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html> {% endcomment %}
+{% endblock%}

@@ -1,0 +1,75 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content %}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    {% include "main/header.html" %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+        <div data-push
+             data-responsive-width="992px"
+             class="mdk-drawer-layout js-mdk-drawer-layout">
+            <div class="mdk-drawer-layout__content page ">
+
+                <div class="container-fluid page__container p-0">
+                    <div class="row m-0">
+                        <div class="col-lg container-fluid page__container">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                                <li class="breadcrumb-item active">View Profile</li>
+                            </ol>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4>Basic Information</h4>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Full Name:</strong> {{ user.get_full_name }}</li>
+                                        <li><strong>Email:</strong> {{ user.email }}</li>
+                                        <li><strong>Gender:</strong> {{ user.get_gender_display }}</li>
+                                        <li><strong>Role:</strong> {{ user.role.name }}</li>
+                                    </ul>
+                                    {% if user.photo %}
+                                        <img src="{{ user.photo.url }}" alt="{{ user.get_full_name }}" class="img-thumbnail">
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="page-nav" class="col-lg-auto page-nav">
+                            <div data-perfect-scrollbar>
+                                <div class="page-section pt-lg-32pt">
+                                    <ul class="nav page-nav__menu">
+                                        <li class="nav-item">
+                                            <a href="{% url 'view_profile' user_id=user.id %}"
+                                               class="nav-link active">Basic Information</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {% include "main/side-menu.html" %}
+
+        </div>
+
+        <!-- App Settings FAB -->
+        <div id="app-settings">
+            <app-settings layout-active="default"
+                          :layout-location="{
+                                    'fixed': 'fixed-instructor-courses.html',
+                                    'default': 'instructor-courses.html'
+                                    }"
+                          sidebar-variant="bg-transparent border-0"></app-settings>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,423 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content%}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    {% include "main/header.html" %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+        <div data-push
+             data-responsive-width="992px"
+             class="mdk-drawer-layout js-mdk-drawer-layout">
+            <div class="mdk-drawer-layout__content page ">
+
+                <div class="container-fluid page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'list_course' %}">Course</a></li>
+                        <li class="breadcrumb-item active">View Course</li>
+                    </ol>
+                    <h1 class="h2">{{course.name}}</h1>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="card">
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe class="embed-responsive-item"
+                                                    src="https://player.vimeo.com/video/97243285?title=0&amp;byline=0&amp;portrait=0"
+                                                    allowfullscreen=""></iframe>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ course.description}}
+                                        </div>
+                                    </div>
+                                    
+                                    {% comment %} <!-- Lessons -->
+                                    <ul class="card list-group list-group-fit">
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">1.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="#">Installation</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small class="text-muted-light">2:03</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item active">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    2.
+                                                </div>
+                                                <div class="media-body">
+                                                    <a class="text-white"
+                                                       href="#">The MVC architectural pattern</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small>25:01</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">3.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="#">Database Models</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small class="text-muted-light">12:10</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">4.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="#">Database Access</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small class="text-muted-light">1:25</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">5.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="#">Eloquent Basics</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small class="text-muted-light">22:30</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <div class="text-muted">6.</div>
+                                                </div>
+                                                <div class="media-body">
+                                                    <a href="#">Take Quiz</a>
+                                                </div>
+                                                <div class="media-right">
+                                                    <small class="text-muted-light">10:00</small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul> {% endcomment %}
+
+                                    <!-- Display Joined Students -->
+                                    {% if user.role.name == 'teacher' and is_teacher_owner or user.role.name == 'student' and is_student_joined %}
+                                    <h3>Joined Students</h3>
+                                    <ul class="card list-group list-group-fit">
+                                        {% for enrollment in joined_students %}
+                                            <li class="list-group-item">{{ enrollment.student.first_name }} {{ enrollment.student.last_name }} - {{enrollment.student.email}} 
+                                                (Joined on {{ enrollment.created_on|date:"M d, Y" }}) - Status: {{enrollment.status}} 
+                                                {% if user.role.name == 'teacher'  %}
+                                                    {% if enrollment.is_blocked %}
+                                                        - Blocked
+                                                        <a href="{% url 'unblock_student' course_id=course.id student_id=enrollment.student.id %}" class="btn btn-success btn-sm">Unblock</a>
+                                                    {% else %}
+                                                        <a href="{% url 'block_student' course_id=course.id student_id=enrollment.student.id %}" class="btn btn-danger btn-sm">Block</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </li>
+                                        {% empty %}
+                                            <li class="list-group-item">No students have joined this course yet.</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <!-- Display Comments -->
+                                    <h3>Comments</h3>
+                                    <div id="comments">
+                                        {% for comment in comments %}
+                                            <div class="comment">
+                                                <strong>{{ comment.user.first_name }} {{ comment.user.last_name }} 
+                                                    {% comment %} ({{comment.user.email}}) {% endcomment %}
+                                                </strong> at {{ comment.created_at|date:"M d, Y H:i" }}
+                                                <p>{{ comment.content }}</p>
+                                            </div>
+                                        {% empty %}
+                                            <p id="no_comments">No comments yet. Be the first to comment!</p>
+                                        {% endfor %}
+                                    </div>
+                                    {%endif%}
+                                    {% if user.role.name == 'teacher' and is_teacher_owner or user.role.name == 'student' and is_student_joined and not is_student_blocked  %}
+                                    <!-- Comment Form -->
+                                    <h3>Leave a Comment</h3>
+                                    <form id="comment-form">
+                                        {% csrf_token %}
+                                        <p>
+                                            <textarea class="form-control form-control-prepended" id="comment-content" rows="4" placeholder="Enter your comment here..."></textarea>
+                                        </p>
+                                        <button  type="submit" class="btn btn-primary">Submit Comment</button>
+                                    </form>
+                                    {%endif%}
+                                    
+
+                                </div>
+                                <div class="col-md-4">
+                                    {% if user.role.name == 'student' and is_student_joined %}
+
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <!-- Update Course Status -->
+                                                <h3>Update Course Status</h3>
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="status">Course Status:</label>
+                                                        <select name="status" id="status" class="form-control form-control-prepended">
+                                                            <option value="Inprogress" {% if course_enroll.status == 'Inprogress' %}selected{% endif %}>In Progress</option>
+                                                            <option value="Completed" {% if course_enroll.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                                            <option value="Yet to start" {% if course_enroll.status == 'Yet to start' %}selected{% endif %}>Yet to Start</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Update Status</button>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4>Course Materials</h4>
+                                            <ul>
+                                                {% if user.role.name == 'teacher' and is_teacher_owner or user.role.name == 'student' and is_student_joined %}
+                                                    {% if course_materials %}
+                                                        {% for course_material in course_materials %}
+                                                            <li>{{ course_material.name }} - <a href="{{ course_material.file.url }}">Download</a></li>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <li>No materials for this course.</li>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <li >You dont have permission to view this course materials</li>
+                                                {% endif %}
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                    {% if user.role.name == 'student' and is_student_joined  or  user.role.name == 'teacher' and is_teacher_owner %}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            {% if user.role.name == 'student' and is_student_joined  %}
+                                            <a href="{% url 'download_all_materials' course_id=course.id %}"
+                                               class="btn btn-primary btn-block flex-column">
+                                                <i class="material-icons">get_app</i> Download Files
+                                            </a>
+                                            {% elif  user.role.name == 'teacher' and is_teacher_owner %}
+                                            <button data-toggle="modal" data-target="#uploadMaterialModal"
+                                               class="btn btn-primary btn-block flex-column">
+                                                <i class="material-icons">file_upload</i> upload Files
+                                            </button>
+                                            {%endif%}
+                                        </div>
+                                    </div>
+                                    {%endif%}
+                                    
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="media align-items-center">
+                                                <div class="media-left">
+                                                    <img src="{% if course.teacher.photo %}{{ course.teacher.photo.url }}{% else %}{% static 'images/default_user.png' %}{% endif %}"
+                                                         alt="About Adrian"
+                                                         width="50"
+                                                         class="rounded-circle">
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="card-title"><a href="#">{{ course.teacher.first_name}} {{ course.teacher.last_name}}</a></h4>
+                                                    <p class="card-subtitle">Instructor</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>{% if course.teacher.about_me %}{{ course.teacher.about_me}}{% else %}-{% endif %}</p>
+                                            <a href="#"
+                                               class="btn btn-light"><i class="fab fa-facebook"></i></a>
+                                            <a href="#"
+                                               class="btn btn-light"><i class="fab fa-twitter"></i></a>
+                                            <a href="#"
+                                               class="btn btn-light"><i class="fab fa-github"></i></a>
+                                        </div>
+                                    </div>
+
+                                    {% comment %} <div class="card">
+                                        <ul class="list-group list-group-fit">
+                                            <li class="list-group-item">
+                                                <div class="media align-items-center">
+                                                    <div class="media-left">
+                                                        <i class="material-icons text-muted-light">schedule</i>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        2 <small class="text-muted">hrs</small> &nbsp; 26 <small class="text-muted">min</small>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <div class="media align-items-center">
+                                                    <div class="media-left">
+                                                        <i class="material-icons text-muted-light">assessment</i>
+                                                    </div>
+                                                    <div class="media-body">Beginner</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div> {% endcomment %}
+
+                                    {% comment %} <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Ratings</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="rating">
+                                                <i class="material-icons">star</i>
+                                                <i class="material-icons">star</i>
+                                                <i class="material-icons">star</i>
+                                                <i class="material-icons">star</i>
+                                                <i class="material-icons">star_border</i>
+                                            </div>
+                                            <small class="text-muted">20 ratings</small>
+                                        </div>
+                                    </div> {% endcomment %}
+
+                                    {% comment %} <a href="student-help-center.html"
+                                       class="btn btn-default btn-block">
+                                        <i class="material-icons btn__icon--left">help</i> Get Help
+                                    </a> {% endcomment %}
+                                </div>
+                            </div>
+
+                    
+                </div>
+
+            </div>
+
+            {% include "main/side-menu.html" %}
+
+        </div>
+
+        <!-- App Settings FAB -->
+        <div id="app-settings">
+            <app-settings layout-active="default"
+                          :layout-location="{
+                                    'fixed': 'fixed-instructor-courses.html',
+                                    'default': 'instructor-courses.html'
+                                    }"
+                          sidebar-variant="bg-transparent border-0"></app-settings>
+        </div>
+    </div>
+</div>
+ <!-- Modal Structure -->
+ <div class="modal fade" id="uploadMaterialModal" tabindex="-1" role="dialog" aria-labelledby="uploadMaterialModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadMaterialModalLabel">Upload Course Material</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'upload_material' course_id=course.id %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="materialName">Material Name</label>
+                        <input type="text" class="form-control" id="materialName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="materialFile">Choose file</label>
+                        <input type="file" class="form-control-file" id="materialFile" name="file" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}
+
+
+{% block extrajs %}
+<script type="text/javascript">
+    const course_id = "{{ course.id }}"; // Assuming you have course_id in context
+    const user_id = "{{ user.id }}"; // Assuming you have user_id in context
+    const commentForm = document.querySelector('#comment-form');
+    const commentContent = document.querySelector('#comment-content');
+    const commentsDiv = document.querySelector('#comments');
+
+    let reconnectInterval = 1000; // Initial reconnect interval in milliseconds
+
+    // Function to create and manage WebSocket connection
+    function connectWebSocket() {
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + course_id + '/'
+        );
+
+        // Handle incoming messages
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const commentHtml = `
+                <div class="comment">
+                    <strong>${data.first_name} ${data.last_name}</strong> at ${data.created_at}
+                    <p>${data.message}</p>
+                </div>
+            `;
+            commentsDiv.innerHTML += commentHtml;
+            $('#no_comments').hide();
+        };
+
+        // Handle form submission
+        commentForm.onsubmit = function(e) {
+            e.preventDefault();
+            const message = commentContent.value;
+            const data = JSON.stringify({
+                'message': message,
+                'user_id': user_id,
+            });
+            console.log(data);
+            // Send the message to the WebSocket
+            chatSocket.send(data);
+
+            // Clear the text area
+            commentContent.value = '';
+        };
+
+        // Handle WebSocket connection errors
+        chatSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+        };
+
+        // Handle WebSocket closure and attempt to reconnect
+        chatSocket.onclose = function(e) {
+            console.warn('WebSocket closed unexpectedly. Attempting to reconnect in ' + reconnectInterval / 1000 + ' seconds...');
+            setTimeout(function() {
+                reconnectInterval = Math.min(reconnectInterval * 2, 30000); // Exponential backoff, max 30 seconds
+                connectWebSocket(); // Reconnect after a delay
+            }, reconnectInterval);
+        };
+
+        // Reset reconnect interval upon successful connection
+        chatSocket.onopen = function(e) {
+            console.log('WebSocket connection established');
+            reconnectInterval = 1000; // Reset interval on successful connection
+        };
+    }
+
+    // Initialize WebSocket connection
+    connectWebSocket();
+</script>
+{% endblock %}

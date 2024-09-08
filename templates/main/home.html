@@ -1,0 +1,174 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block content%}
+<!-- Header Layout -->
+<div class="mdk-header-layout js-mdk-header-layout">
+
+    {% include "main/header.html" %}
+
+    <!-- Header Layout Content -->
+    <div class="mdk-header-layout__content">
+
+        <div data-push
+             data-responsive-width="992px"
+             class="mdk-drawer-layout js-mdk-drawer-layout">
+            <div class="mdk-drawer-layout__content page ">
+
+                <div class="container-fluid page__container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    </ol>
+
+                    <div class="d-flex flex-column flex-sm-row flex-wrap mb-headings align-items-start align-items-sm-center">
+                        <div class="flex mb-2 mb-sm-0">
+                            <h1 class="h2">Your Courses</h1>
+                        </div>
+                        {% if user.role.name == 'teacher'%}
+                        <a href="{% url 'create_course' %}"
+                           class="btn btn-success">Add course</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="card card-body border-left-3 border-left-primary navbar-shadow mb-4">
+                        <form action="" method="get">
+                            <div class="d-flex flex-wrap2 align-items-center mb-headings">
+                                <div class="flex search-form ml-3 search-form--light">
+                                    <input type="text"
+                                           class="form-control"
+                                           placeholder="Search courses"
+                                           id="searchSample02"
+                                           name="q" 
+                                           value="{{ request.GET.q|default_if_none:'' }}"> 
+                                    <button class="btn"
+                                            type="submit"
+                                            role="button"><i class="material-icons">search</i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {% if not courses %}
+                    <div class="alert alert-light alert-dismissible border-1 border-left-3 border-left-warning"
+                         role="alert">
+                        <button type="button"
+                                class="close"
+                                data-dismiss="alert"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="text-black-70">Ohh no! No courses to display. Add some courses.</div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        {% for course in courses%}
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="d-flex flex-column flex-sm-row">
+                                        <a href="{% url 'view_course_detail' course.course.id %}"
+                                           class="avatar avatar-lg avatar-4by3 mb-3 w-xs-plus-down-100 mr-sm-3">
+                                            <img src="{% if course.course.image %}{{ course.course.image.url }}{%  endif %}"
+                                                 alt="Card image cap"
+                                                 class="avatar-img rounded">
+                                        </a>
+                                        <div class="flex"
+                                             style="min-width: 200px;">
+                                            <!-- <h5 class="card-title text-base m-0"><a href="instructor-course-edit.html"><strong>Learn Vue.js</strong></a></h5> -->
+                                            <h4 class="card-title mb-1">
+                                                <a href="{% url 'view_course_detail' course.course.id %}">{{ course.course.name}}</a>
+                                                {% if user.role.name == 'student' and course.is_enrolled %}
+                                                <a style="margin-left:15px;" class="btn btn-sm btn-white bg-green">Joined</a>
+                                                {% elif user.role.name == 'student' and  not course.is_enrolled %}
+                                                <a href="{% url 'join_course' course.course.id %}" style="margin-left:15px;" class="btn btn-sm btn-white">Join</a>
+                                                {% endif %}
+                                            </h4>
+                                            <p class="text-black-70">{{ course.course.description }}</p>
+                                            
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% if user.role.name == 'teacher'%}
+                                <div class="card__options dropdown right-0 pr-2">
+                                    <a href="#"
+                                       class="dropdown-toggle text-muted"
+                                       data-caret="false"
+                                       data-toggle="dropdown">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item"
+                                           href="{% url 'edit_course' course.course.id %}">Edit course</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item text-danger"
+                                           href="{% url 'delete_course' course.course.id %}">Delete course</a>
+                                    </div>
+                                </div>
+                                {% endif%}
+                            </div>
+                        </div>
+
+                        {% endfor%}
+
+                    </div>
+
+                    {% comment %} <!-- Pagination -->
+                    <ul class="pagination justify-content-center pagination-sm">
+                        <li class="page-item disabled">
+                            <a class="page-link"
+                               href="#"
+                               aria-label="Previous">
+                                <span aria-hidden="true"
+                                      class="material-icons">chevron_left</span>
+                                <span>Prev</span>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link"
+                               href="#"
+                               aria-label="1">
+                                <span>1</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="#"
+                               aria-label="1">
+                                <span>2</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="#"
+                               aria-label="Next">
+                                <span>Next</span>
+                                <span aria-hidden="true"
+                                      class="material-icons">chevron_right</span>
+                            </a>
+                        </li>
+                    </ul> {% endcomment %}
+                </div>
+
+            </div>
+
+            {% include "main/side-menu.html" %}
+
+        </div>
+
+        <!-- App Settings FAB -->
+        <div id="app-settings">
+            <app-settings layout-active="default"
+                          :layout-location="{
+                                    'fixed': 'fixed-instructor-courses.html',
+                                    'default': 'instructor-courses.html'
+                                    }"
+                          sidebar-variant="bg-transparent border-0"></app-settings>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock%}

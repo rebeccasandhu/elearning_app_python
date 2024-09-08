@@ -1,0 +1,9 @@
+Django
+djangorestframework
+channels
+Pillow
+django-allauth
+django-cors-headers
+djangorestframework-simplejwt
+daphne
+uvicorn
