@@ -75,8 +75,8 @@ AUTHENTICATION_BACKENDS = [
 
 
 CORS_ALLOW_ALL_ORIGINS = True  # Enable CORS for all domains (only for testing)
-CSRF_TRUSTED_ORIGINS = ['*']
-
+# CSRF_TRUSTED_ORIGINS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://elearning-app-python-9vawk.ondigitalocean.app']
 
 # Custom user model
 AUTH_USER_MODEL = 'main.User'
