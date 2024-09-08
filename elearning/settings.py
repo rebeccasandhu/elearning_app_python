@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    "corsheaders",
     'rest_framework',
     'rest_framework.authtoken',
     'channels',
@@ -58,6 +59,7 @@ SITE_ID = 1
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + PROJECT_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,7 +72,7 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True  # Enable CORS for all domains (only for testing)
 # Custom user model
 AUTH_USER_MODEL = 'main.User'
 
