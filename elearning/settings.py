@@ -72,7 +72,12 @@ MIDDLEWARE = [
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+
 CORS_ALLOW_ALL_ORIGINS = True  # Enable CORS for all domains (only for testing)
+CSRF_TRUSTED_ORIGINS = ['*']
+
+
 # Custom user model
 AUTH_USER_MODEL = 'main.User'
 
