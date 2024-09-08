@@ -364,7 +364,7 @@
     // Function to create and manage WebSocket connection
     function connectWebSocket() {
         const chatSocket = new WebSocket(
-            'ws://' + window.location.host + '/ws/chat/' + course_id + '/'
+            'wss://' + window.location.host + '/ws/chat/' + course_id + '/'
         );
 
         // Handle incoming messages
